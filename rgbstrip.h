@@ -15,14 +15,16 @@
 #define BLUEPIN A4     ///BLUE LED
 #define TESTPIN D7     // Onboard LED - Used to debug
  
-#define FADESPEED 5    // Speed of pulse and flase effects
+#define FADESPEED 10    // Speed of pulse and flase effects
 #define FLASHSPEED 1   // Default speed of flash effects
 
 
  
 void setup() {
   Spark.function("pulse", pulse);
+  Spark.function("rgbPulse", rgbPulse);
   Spark.function("flash", flash);
+  Spark.function("colour", colour);
   pinMode(TESTPIN, OUTPUT);
   pinMode(REDPIN, OUTPUT);
   pinMode(GREENPIN, OUTPUT);
@@ -35,6 +37,11 @@ void loop() {
 
 }
 
+
+/*
+*   flash blinks one colour
+*
+*/
   int flash(String colour)
   {
 
@@ -43,7 +50,7 @@ void loop() {
       while (n>0) {
 
         analogWrite(REDPIN, 255);
-        delay(FADESPEED);
+        delay(FLASHSPEED);
         analogWrite(REDPIN, 0);
         --n;
         
@@ -51,6 +58,11 @@ void loop() {
 
   }
   
+  
+/*
+*   rpPulse pulses one colour
+*
+*/  
     int pulse(String colour)
   {
 
@@ -74,3 +86,59 @@ void loop() {
       
 
   }
+  
+  
+/*
+*   rgbPulse pulses through Red Green Blue in order
+*
+*/
+    int rgbPulse(String colour)
+  {
+
+      int r;
+      int n = 10;
+    
+      while (n>0) {
+
+            for (r = 0; r < 255; r++) {
+                analogWrite(REDPIN, r);
+                delay(FADESPEED);
+            }
+            
+            analogWrite(REDPIN, 0);  
+        
+            for (r = 0; r < 255; r++) {
+                analogWrite(GREENPIN, r);
+                delay(FADESPEED);
+            } 
+            
+            analogWrite(GREENPIN, 0);            
+
+            for (r = 0; r < 255; r++) {
+                analogWrite(BLUEPIN, r);
+                delay(FADESPEED);
+            }
+            
+            analogWrite(BLUEPIN, 0);            
+            
+        --n;
+      }
+      
+
+  }  
+  
+/*
+*   colour mixes one colour and leaves on
+*   TODO: set colour from parameters
+*
+*/  
+    int colour(String colour)
+  {
+
+        analogWrite(REDPIN, 249);
+        analogWrite(GREENPIN, 50);
+        analogWrite(BLUEPIN, 211);
+
+
+  }
+    
